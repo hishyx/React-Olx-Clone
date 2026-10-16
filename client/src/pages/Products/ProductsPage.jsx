@@ -6,6 +6,7 @@ import { fetchProducts } from "../../slices/productSlice.jsx";
 import { addToCart } from "../../slices/cartSlice.jsx";
 import { Link } from "react-router-dom";
 import { CATEGORIES } from "../../data.js";
+import api from "../../api/api.js";
 
 function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -17,14 +18,25 @@ function ProductsPage() {
     error,
   } = useSelector((state) => state.products);
   const user = useSelector((state) => state.user);
+  const cartItems = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchProducts({ category: selectedCategory, maxPrice }));
   }, [dispatch, selectedCategory, maxPrice]);
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    toast.success(`${product.title} added to cart!`);
+  const handleAddToCart = async (product) => {
+    if (cartItems.some((item) => item._id === product._id)) {
+      toast.error(`${product.title} is already in your cart`);
+      return;
+    }
+
+    try {
+      await api.post("/cart/items", { productId: product._id });
+      dispatch(addToCart(product));
+      toast.success(`${product.title} added to cart!`);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Could not add item to cart");
+    }
   };
 
   const handleResetFilters = () => {
@@ -216,7 +228,7 @@ function ProductsPage() {
 
       <div className="products-page">
         <div className="products-header">
-          <h1>Explore Marketplace</h1>
+          <h1>CloneLx Market</h1>
         </div>
 
         {/* Basic Category & Price Filtering */}

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../api/api.js";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { CATEGORIES } from "../../data.js";
 function SellPage() {
   const {
@@ -12,6 +12,7 @@ function SellPage() {
     formState: { errors },
   } = useForm();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const productId = searchParams.get("id");
 
   useEffect(() => {
@@ -27,12 +28,12 @@ function SellPage() {
   const onSubmit = async (data) => {
     try {
       const payload = { ...data, price: Number(data.price) };
-      if (productId) await api.put(`/products/${productId}`, payload);
+      if (productId) await api.patch(`/products/${productId}`, payload);
       else await api.post("/products", payload);
       toast.success(
         productId ? "Listing updated" : "Product listed successfully!",
       );
-      reset();
+      navigate("/my-products");
     } catch (error) {
       toast.error(error.response?.data?.message || "Could not list product");
     }

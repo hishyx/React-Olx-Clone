@@ -98,7 +98,7 @@ function Footer() {
       <footer className="footer-container">
         <div className="footer-inner">
           <div className="footer-brand">
-            <h3>OLX Market</h3>
+            <h3>CloneLx Market</h3>
             <p>
               Your trusted community marketplace for buying and selling electronics,
               vehicles, mobile phones, furniture, and more.
@@ -137,7 +137,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>&copy; {new Date().getFullYear()} OLX Clone Inc. All rights reserved.</span>
+          <span>&copy; {new Date().getFullYear()} CloneLx Inc. All rights reserved.</span>
           <span>Designed with reference to Login Page visual design system.</span>
         </div>
       </footer>

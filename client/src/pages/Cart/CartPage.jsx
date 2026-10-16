@@ -1,20 +1,27 @@
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, updateQuantity } from "../../slices/cartSlice.jsx";
+import { removeFromCart, setCart } from "../../slices/cartSlice.jsx";
+import api from "../../api/api.js";
 
 function CartPage() {
   const cartItems = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleUpdateQuantity = (id, change) => {
-    dispatch(updateQuantity({ id, change }));
-  };
+  useEffect(() => {
+    api.get("/cart").then(({ data }) => dispatch(setCart(data)));
+  }, [dispatch]);
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
-    toast.success("Item removed from cart");
+  const handleRemoveItem = async (id) => {
+    try {
+      await api.delete(`/cart/items/${id}`);
+      dispatch(removeFromCart(id));
+      toast.success("Item removed from cart");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Could not remove item");
+    }
   };
 
   const total = cartItems.reduce(
@@ -100,40 +107,6 @@ function CartPage() {
           display: flex;
           align-items: center;
           gap: 16px;
-        }
-
-        .quantity-controls {
-          display: flex;
-          align-items: center;
-          border: 1px solid #d5d8df;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-
-        .btn-qty {
-          width: 32px;
-          height: 32px;
-          border: none;
-          background: #ffffff;
-          color: #292b35;
-          font-size: 16px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.15s ease;
-        }
-
-        .btn-qty:hover {
-          background: #f8f9fb;
-          color: #8f2632;
-        }
-
-        .qty-display {
-          width: 32px;
-          text-align: center;
-          font-size: 14px;
-          font-weight: 600;
         }
 
         .btn-remove {
@@ -283,24 +256,6 @@ function CartPage() {
                   </div>
 
                   <div className="cart-item-actions">
-                    <div className="quantity-controls">
-                      <button
-                        type="button"
-                        className="btn-qty"
-                        onClick={() => handleUpdateQuantity(item._id, -1)}
-                      >
-                        –
-                      </button>
-                      <span className="qty-display">{item.quantity}</span>
-                      <button
-                        type="button"
-                        className="btn-qty"
-                        onClick={() => handleUpdateQuantity(item._id, 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-
                     <button
                       type="button"
                       className="btn-remove"

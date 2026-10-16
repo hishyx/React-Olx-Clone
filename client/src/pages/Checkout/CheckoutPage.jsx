@@ -26,7 +26,7 @@ function CheckoutPage() {
     e.preventDefault();
     dispatch(checkoutStarted());
     try {
-      await api.post("/checkout", { productIds: items.map((item) => item._id) });
+      await api.post("/checkout");
       dispatch(checkoutSucceeded());
       dispatch(clearCart());
       setOrderPlaced(true);
@@ -219,9 +219,6 @@ function CheckoutPage() {
               Thank you for your purchase. We have received your order details and
               the seller has been notified.
             </p>
-            <div style={{ fontSize: "14px", color: "#5e6270" }}>
-              Total Paid: <strong>${total.toLocaleString()}</strong>
-            </div>
             <Link to="/products" className="btn-back">
               Continue Shopping
             </Link>

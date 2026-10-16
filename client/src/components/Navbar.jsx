@@ -139,7 +139,7 @@ function Navbar() {
       <header className="navbar-container">
         <div className="navbar-inner">
           <Link to="/products" className="navbar-brand">
-            <span className="brand-logo">OLX</span>
+            <span className="brand-logo">CloneLx</span>
           </Link>
 
           <button
@@ -165,6 +165,14 @@ function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Cart
+            </Link>
+
+            <Link
+              to="/my-products"
+              className={`nav-link ${isActive("/my-products") ? "active" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              My Products
             </Link>
 
             <Link

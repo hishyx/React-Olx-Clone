@@ -4,6 +4,7 @@ import ProductsPage from "../pages/Products/ProductsPage.jsx";
 import SellPage from "../pages/Sell/SellPage.jsx";
 import CartPage from "../pages/Cart/CartPage.jsx";
 import CheckoutPage from "../pages/Checkout/CheckoutPage.jsx";
+import MyProductsPage from "../pages/MyProducts/MyProductsPage.jsx";
 import ProtectedRoutes from "../components/ProtectedRoutes.jsx";
 
 function AppRoutes() {
@@ -15,6 +16,7 @@ function AppRoutes() {
       {/* Marketplace Pages */}
       <Route element={<ProtectedRoutes />}>
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/my-products" element={<MyProductsPage />} />
 
         <Route path="/sell" element={<SellPage />} />
 
